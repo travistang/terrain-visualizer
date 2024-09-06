@@ -1,8 +1,10 @@
-import { Line, Point } from "@react-three/drei";
+import { Line } from "@react-three/drei";
 import { Bloom, EffectComposer } from "@react-three/postprocessing";
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
+import { Mesh } from "three";
 import { getGPXLineCoordinatesOnTerrain } from "..";
-import { useTraversePathAnimation } from "../../common/utils/view/hooks/use-traverse-path-animation";
+import { useTrajectory } from "../../common/utils/view/hooks/use-traverse-path-animation";
+import { Ball } from "../../common/utils/view/maps/ball";
 import { GeoTIFFData } from "../../terrain-data-provider/geotiff";
 import { LatLng } from "../../terrain-visualizer/types";
 
@@ -19,6 +21,7 @@ export const GPXRoute = ({
   route,
   terrainData,
 }: Props) => {
+  const ballRef = useRef<Mesh>(null);
   const segments = useMemo(() => {
     if (route.length <= 1 || !terrainData) return null;
     const coordinatesOnTerrain = getGPXLineCoordinatesOnTerrain(
@@ -28,18 +31,18 @@ export const GPXRoute = ({
 
     return coordinatesOnTerrain;
   }, [terrainData, route]);
-  const { position: travelingDotPosition } = useTraversePathAnimation({
-    waypoints: segments?.flat() ?? [],
-    durationMs: 1000,
-    repeat: true,
-  });
-
+  useTrajectory(ballRef, segments?.flat() ?? [], 10000);
   return (
     <>
       {segments?.map((segment, i) => (
         <>
           {style === "traveling-dot" && (
-            <Point position={travelingDotPosition} color={color} />
+            <Ball
+              ballRef={ballRef}
+              glowMode="constant"
+              color={color}
+              size={0.05}
+            />
           )}
           <Line
             lineWidth={5}

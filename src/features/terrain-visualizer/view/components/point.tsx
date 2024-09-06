@@ -1,13 +1,15 @@
-import { Billboard, Sphere, Text } from "@react-three/drei";
+import { Billboard, Text } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
 import { MeshStandardMaterial, PointLight } from "three";
+import { Ball, GlowMode } from "../../../common/utils/view/maps/ball";
 import { GeoTIFFData } from "../../../terrain-data-provider/geotiff";
 import { LatLng } from "../../types";
 import { getPointOnTerrain } from "../../utils/terrain";
 import { transformToTerrainCoordinate } from "../../utils/transform";
 
 type Props = {
+  glowMode?: GlowMode;
   terrainData: GeoTIFFData;
   coordinates: LatLng;
   size?: number;
@@ -17,6 +19,7 @@ type Props = {
 
 export const Point = ({
   terrainData,
+  glowMode,
   color,
   size = 0.05,
   coordinates,
@@ -52,23 +55,7 @@ export const Point = ({
           {label}
         </Text>
       </Billboard>
-      <Sphere>
-        <sphereGeometry args={[size, 32, 32]} />
-        <meshStandardMaterial
-          ref={materialRef}
-          color={color}
-          emissive={color}
-          emissiveIntensity={2}
-          toneMapped={false}
-        />
-        <pointLight
-          ref={lightRef}
-          color={color}
-          intensity={3}
-          distance={4}
-          decay={2}
-        />
-      </Sphere>
+      <Ball color={color} glowSpeed={1} size={size} glowMode={glowMode} />
     </group>
   );
 };
