@@ -1,24 +1,30 @@
-import React, { useEffect, useRef } from "react";
-import { PlaneGeometry, Mesh, DoubleSide } from "three";
-import { HeightMap } from "../../../terrain-generator";
 import { Plane } from "@react-three/drei";
+import { useEffect, useRef } from "react";
+import { DoubleSide, Mesh, PlaneGeometry } from "three";
+import { HeightMap } from "../../../terrain-generator";
 
 type Props = {
   heightMap: HeightMap;
   width: number;
   height: number;
+  hollow?: boolean;
 };
 
 export const gridSize = 200;
 export const gridSegments = 400;
 
-export const Terrain = ({ heightMap, width, height }: Props) => {
+export const Terrain = ({ hollow, heightMap, width, height }: Props) => {
   const meshRef = useRef<Mesh>(null);
   const solidMeshRef = useRef<Mesh>(null);
 
   useEffect(() => {
     if (heightMap && meshRef.current && solidMeshRef.current) {
-      const geometry = new PlaneGeometry(100, 100 * height / width, width - 1, height - 1);
+      const geometry = new PlaneGeometry(
+        100,
+        (100 * height) / width,
+        width - 1,
+        height - 1
+      );
       const vertices = geometry.attributes.position.array;
 
       for (let y = 0; y < height; y++) {
@@ -39,19 +45,22 @@ export const Terrain = ({ heightMap, width, height }: Props) => {
       solidMeshRef.current.castShadow = true; // Enable casting shadows
       solidMeshRef.current.receiveShadow = true;
     }
-  }, [heightMap]);
+  }, [heightMap, height, width]);
 
   return (
     <>
-      <Plane
-        position={[0, 0, 0]}
-        ref={solidMeshRef}
-        receiveShadow
-        castShadow
-        args={[gridSize, gridSize, gridSegments, gridSegments]}
-      >
-        <meshStandardMaterial color="#666666" side={DoubleSide} />
-      </Plane>
+      {!hollow && (
+        <Plane
+          name="terrain"
+          position={[0, 0, 0]}
+          ref={solidMeshRef}
+          receiveShadow
+          castShadow
+          args={[gridSize, gridSize, gridSegments, gridSegments]}
+        >
+          <meshStandardMaterial color="#666666" side={DoubleSide} />
+        </Plane>
+      )}
       <Plane
         ref={meshRef}
         position={[0, 0, 0.01]}
