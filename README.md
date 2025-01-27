@@ -4,7 +4,7 @@
 
 > Visualizing an arbitrary terrain with React and React-three-fiber (Three.js).
 
-[](./resources/screenshots/terrain-visualizer-demo.gif)
+![Terrain Visualizer demo](https://github.com/travistang/terrain-visualizer/blob/main/resources/screenshots/terrain-visualizer-demo.gif)
 
 ## Overview
 
