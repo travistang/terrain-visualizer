@@ -8,6 +8,10 @@ export const splitArrayBy = <T>(arr: T[], ele: T): T[][] => {
   ].filter((segment) => segment.length > 0);
 };
 
+/**
+ * Interpolate values from a 2D array field (values are defined on integer
+ * coordinates that is 0-based) given a floating point coordinates
+ */
 export const interpolate = <T>(
   arrayField: T[][],
   coordinates: [number, number],
@@ -56,21 +60,4 @@ export const interpolate = <T>(
   const w22 = (x - x1) * (y - y1);
 
   return q11 * w11 + q12 * w12 + q21 * w21 + q22 * w22;
-};
-
-export const removeConsecutiveDuplicate = <T>(
-  arr: T[],
-  compareFn = (a: T, b: T) => a === b
-) => {
-  const result: T[] = [];
-  for (const element of arr) {
-    if (!result.length) {
-      result.push(element);
-      continue;
-    }
-    if (!compareFn(result.at(-1)!, element)) {
-      result.push(element);
-    }
-  }
-  return result;
 };

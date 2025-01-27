@@ -2,8 +2,8 @@ import { Sphere } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 import { Mesh, MeshStandardMaterial, PointLight, Vector3 } from "three";
+import { GlowMode } from "../../../../terrain-data-provider/types";
 
-export type GlowMode = "none" | "constant" | "blink";
 type Props = {
   ballRef?: React.MutableRefObject<Mesh | null>;
   color: string;

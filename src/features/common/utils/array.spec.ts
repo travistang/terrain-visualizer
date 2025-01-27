@@ -1,4 +1,4 @@
-import { interpolate, removeConsecutiveDuplicate, splitArrayBy } from "./array";
+import { interpolate, splitArrayBy } from "./array";
 
 describe("array utils", () => {
   describe("splitArrayBy", () => {
@@ -127,29 +127,6 @@ describe("array utils", () => {
 
       const result = interpolate(arrayField, [0.5, 0.5]);
       expect(result).toBe(-2.5);
-    });
-  });
-
-  describe("removeConsecutiveDuplicate", () => {
-    it("should return empty array when fed with empty array", () => {
-      expect(removeConsecutiveDuplicate([])).toEqual([]);
-    });
-    it("should return 1 element when array with 1 element is fed", () => {
-      expect(removeConsecutiveDuplicate([42])).toEqual([42]);
-    });
-
-    it("should remove duplicated elements that are consecutive to each other", () => {
-      expect(
-        removeConsecutiveDuplicate([42, 42, 1, 2, 3, 42, 42, 4, 42, 42])
-      ).toEqual([42, 1, 2, 3, 42, 4, 42]);
-    });
-
-    it("should also remove duplicated elements that appears together more than twice", () => {
-      expect(
-        removeConsecutiveDuplicate([
-          42, 42, 1, 2, 3, 42, 42, 42, 42, 42, 4, 42, 42,
-        ])
-      ).toEqual([42, 1, 2, 3, 42, 4, 42]);
     });
   });
 });

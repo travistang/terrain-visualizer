@@ -1,26 +1,20 @@
 import { Line } from "@react-three/drei";
 import { Bloom, EffectComposer } from "@react-three/postprocessing";
-import { useMemo, useRef } from "react";
+import React, { useContext, useMemo, useRef } from "react";
 import { Mesh } from "three";
 import { getGPXLineCoordinatesOnTerrain } from "..";
 import { useTrajectory } from "../../common/utils/view/hooks/use-traverse-path-animation";
 import { Ball } from "../../common/utils/view/maps/ball";
-import { GeoTIFFData } from "../../terrain-data-provider/geotiff";
-import { LatLng } from "../../terrain-visualizer/types";
+import { RouteProps } from "../../terrain-data-provider/types";
+import { terrainDataContext } from "../../terrain-visualizer/view/contexts/TerrainDataContext";
 
-export type RouteStyle = "static" | "traveling-dot";
-type Props = {
-  route: LatLng[];
-  terrainData: GeoTIFFData;
-  style?: RouteStyle;
-  color: string;
-};
 export const GPXRoute = ({
+  id,
   color,
   style = "static",
   route,
-  terrainData,
-}: Props) => {
+}: RouteProps) => {
+  const terrainData = useContext(terrainDataContext);
   const ballRef = useRef<Mesh>(null);
   const segments = useMemo(() => {
     if (route.length <= 1 || !terrainData) return null;
@@ -33,7 +27,7 @@ export const GPXRoute = ({
   }, [terrainData, route]);
   useTrajectory(ballRef, segments?.flat() ?? [], 10000);
   return (
-    <>
+    <React.Fragment key={id}>
       {segments?.map((segment, i) => (
         <>
           {style === "traveling-dot" && (
@@ -45,7 +39,7 @@ export const GPXRoute = ({
             />
           )}
           <Line
-            lineWidth={5}
+            lineWidth={1}
             points={segment}
             key={i}
             color={color}
@@ -61,6 +55,6 @@ export const GPXRoute = ({
           </EffectComposer>
         </>
       ))}
-    </>
+    </React.Fragment>
   );
 };

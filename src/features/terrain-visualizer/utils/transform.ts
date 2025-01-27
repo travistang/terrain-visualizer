@@ -2,7 +2,10 @@ import { interpolate } from "../../common/utils/array";
 import { GeoTIFFData } from "../../terrain-data-provider/geotiff";
 import { LatLng, XYCoordinates } from "../types";
 
-const isCoordinateInBound = (coordinates: LatLng, geoTiffData: GeoTIFFData) => {
+export const isCoordinateInBound = (
+  coordinates: LatLng,
+  geoTiffData: GeoTIFFData
+) => {
   const [lat, lon] = coordinates;
   const { boundingBox } = geoTiffData;
   const [minX, minY, maxX, maxY] = boundingBox;
@@ -14,8 +17,6 @@ export const transformToTerrainDimensionRatio = (
   coordinates: LatLng,
   geoTiffData: GeoTIFFData
 ) => {
-  if (!isCoordinateInBound(coordinates, geoTiffData)) return null;
-
   const [lat, lon] = coordinates;
   const { boundingBox } = geoTiffData;
   const [minX, minY, maxX, maxY] = boundingBox;
@@ -28,9 +29,8 @@ export const transformToTerrainDimensionRatio = (
 export const latLngToHeightMapCoordinates = (
   coordinates: LatLng,
   geoTiffData: GeoTIFFData
-): XYCoordinates | null => {
+): XYCoordinates => {
   const ratio = transformToTerrainDimensionRatio(coordinates, geoTiffData);
-  if (!ratio) return null;
   const { height, width } = geoTiffData;
   const row = (1 - ratio[1]) * (height - 1); // invert latitude because higher latitudes are typically at the top
   const col = ratio[0] * (width - 1);
@@ -40,9 +40,8 @@ export const latLngToHeightMapCoordinates = (
 export const transformToTerrainCoordinate = (
   coordinates: LatLng,
   geoTiffData: GeoTIFFData
-): XYCoordinates | null => {
+): XYCoordinates => {
   const ratio = transformToTerrainDimensionRatio(coordinates, geoTiffData);
-  if (!ratio) return null;
 
   const { height, width } = geoTiffData;
 
@@ -52,6 +51,19 @@ export const transformToTerrainCoordinate = (
   return [xLen * ratio[0] - xLen / 2, yLen * ratio[1] - yLen / 2];
 };
 
+export const transformToLatLng = (
+  coordinates: XYCoordinates,
+  geoTiffData: GeoTIFFData
+): LatLng => {
+  const { height, width, boundingBox } = geoTiffData;
+  const [minX, minY, maxX, maxY] = boundingBox;
+  const [x, y] = coordinates;
+  const xLen = 100;
+  const yLen = (xLen * height) / width;
+  const lon = minX + ((maxX - minX) * (x + xLen / 2)) / xLen;
+  const lat = minY + ((maxY - minY) * (y + yLen / 2)) / yLen;
+  return [lat, lon];
+};
 export const getElevationAtCoordinates = (
   coordinates: XYCoordinates,
   geoTiffData: GeoTIFFData
@@ -67,8 +79,6 @@ export const getElevationAtLatLng = (
     coordinates,
     geoTiffData
   );
-
-  if (!heightMapCoordinates) return null;
 
   return getElevationAtCoordinates(
     heightMapCoordinates.reverse() as XYCoordinates,
