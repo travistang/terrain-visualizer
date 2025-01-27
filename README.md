@@ -38,9 +38,9 @@ Then you should see the app at `localhost:4173`
 
 You should see there are 3 buttons on the upper left side inside a big blank page. **That's expected because you need to get some data for the visualization to work.**
 
-You will need to upload [GeoTIFF](https://en.wikipedia.org/wiki/GeoTIFF) file using the top-most button (with the map logo). For your convenience I have uploaded a terrain scan around [Zugspitze](https://en.wikipedia.org/wiki/Zugspitze) by [NASA](https://lpdaac.usgs.gov/products/srtmgl3v003/) which you can find [here](https://github.com/travistang/terrain-visualizer/resources/).
+You will need to upload [GeoTIFF](https://en.wikipedia.org/wiki/GeoTIFF) file using the top-most button (with the map logo). For your convenience I have uploaded a terrain scan around [Zugspitze](https://en.wikipedia.org/wiki/Zugspitze) by [NASA](https://lpdaac.usgs.gov/products/srtmgl3v003/) which you can find [here](https://github.com/travistang/terrain-visualizer/blob/main/resources/terrain/zugspitze.tif).
 
-After that you should see a 3D terrain loaded (if not, try zooming out with your mouse wheel). Then you can proceed to click the second button to upload a [GPX file](./resources/gpx/zugspitze_and_wank.gpx) I prepared that contains one of the hiking routes I have done (Zugspitze via Stopselzieher and down via Reintal, then to Wank (1780m) and down to Garmisch)
+After that you should see a 3D terrain loaded (if not, try zooming out with your mouse wheel). Then you can proceed to click the second button to upload a [GPX file](https://github.com/travistang/terrain-visualizer/blob/main/resources/gpx/zugspitze_and_wank.gpx) I prepared that contains one of the hiking routes I have done (Zugspitze via Stopselzieher and down via Reintal, then to Wank (1780m) and down to Garmisch)
 
 And you should see a glowing yellow line that's snugged on the terrain, with a glowing red dot which is the Zugspitze Gipfel!
 
